@@ -1,0 +1,9 @@
+{
+  "name": "braze-sephora-lifecycle",
+  "version": "1.0.0",
+  "description": "Interactive Braze user identity & lifecycle explainer for Sephora",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site — no build step required'"
+  }
+}
