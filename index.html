@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Braze × Sephora — User Profile Lifecycle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #F26B3A;
+      --orange-light: #FEF0E9;
+      --orange-mid: #FAD4C0;
+      --navy: #0F172A;
+      --navy-mid: #1E293B;
+      --slate: #475569;
+      --slate-light: #94A3B8;
+      --bg: #F8F7F5;
+      --white: #FFFFFF;
+      --border: #E2E8F0;
+      --green: #10B981;
+      --green-light: #D1FAE5;
+      --amber: #F59E0B;
+      --amber-light: #FEF3C7;
+      --red: #EF4444;
+      --red-light: #FEE2E2;
+      --purple: #7C3AED;
+      --purple-light: #EDE9FE;
+      --blue: #3B82F6;
+      --blue-light: #DBEAFE;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--navy);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; color: var(--navy); text-decoration: none; }
+    .nav-brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all .15s;
+      border: none;
+      background: none;
+    }
+    .nav-link:hover { background: var(--bg); color: var(--navy); }
+    .nav-link.active { background: var(--navy); color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 72px 32px 56px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange-light);
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--navy);
+      max-width: 700px;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--orange); }
+    .hero-sub {
+      font-size: 17px;
+      color: var(--slate);
+      max-width: 600px;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-value { font-size: 32px; font-weight: 700; color: var(--navy); }
+    .hero-stat-label { font-size: 12px; color: var(--slate-light); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+
+    /* ── SECTION ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px 64px;
+    }
+    .section-header { margin-bottom: 32px; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .section-title { font-size: 26px; font-weight: 700; color: var(--navy); }
+    .section-sub { font-size: 15px; color: var(--slate); margin-top: 6px; }
+
+    /* ── CONCEPT CARDS ── */
+    .concepts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 700px) { .concepts-grid { grid-template-columns: 1fr; } }
+    .concept-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .concept-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .concept-icon.orange { background: var(--orange-light); }
+    .concept-icon.purple { background: var(--purple-light); }
+    .concept-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .concept-card p { font-size: 14px; color: var(--slate); line-height: 1.6; }
+    .concept-card .concept-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-family: 'Menlo', 'Monaco', monospace;
+    }
+    .concept-tag.orange { background: var(--orange-light); color: var(--orange); }
+    .concept-tag.purple { background: var(--purple-light); color: var(--purple); }
+
+    /* ── SIMULATOR ── */
+    .simulator {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .sim-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .sim-header-left h3 { font-size: 16px; font-weight: 600; }
+    .sim-header-left p { font-size: 13px; color: var(--slate); margin-top: 2px; }
+    .journey-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .journey-tab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--slate);
+      transition: all .15s;
+    }
+    .journey-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .journey-tab:hover:not(.active) { border-color: var(--slate); color: var(--navy); }
+
+    .sim-body { padding: 24px; }
+
+    /* Visual diagram */
+    .sim-diagram {
+      display: grid;
+      grid-template-columns: 1fr 20px 1fr 20px 1fr;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 24px;
+      padding: 24px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    .sim-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+    .sim-node-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      transition: all .4s ease;
+      position: relative;
+    }
+    .sim-node-circle.anon {
+      background: #F1F5F9;
+      border: 2px dashed #CBD5E1;
+    }
+    .sim-node-circle.identified {
+      background: var(--orange-light);
+      border: 2px solid var(--orange);
+    }
+    .sim-node-circle.server {
+      background: var(--purple-light);
+      border: 2px solid var(--purple);
+    }
+    .sim-node-circle.empty {
+      background: #F8FAFC;
+      border: 2px dashed #E2E8F0;
+      color: #CBD5E1;
+    }
+    .sim-node-label { font-size: 12px; font-weight: 500; color: var(--slate); }
+    .sim-node-sublabel { font-size: 11px; color: var(--slate-light); margin-top: -6px; }
+
+    .sim-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate-light);
+      font-size: 18px;
+    }
+    .sim-arrow.active { color: var(--orange); }
+
+    .sim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .sim-badge.anon { background: #F1F5F9; color: #64748B; }
+    .sim-badge.identified { background: var(--orange-light); color: var(--orange); }
+    .sim-badge.merged { background: var(--green-light); color: #059669; }
+    .sim-badge.risk { background: var(--red-light); color: var(--red); }
+    .sim-badge.roadmap { background: var(--purple-light); color: var(--purple); }
+
+    /* Step info */
+    .sim-step-info {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .sim-step-number {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--slate-light);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .sim-step-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+    .sim-step-desc { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 12px; }
+    .sim-insight {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+    .sim-insight.info { background: var(--blue-light); color: #1D4ED8; }
+    .sim-insight.success { background: var(--green-light); color: #065F46; }
+    .sim-insight.warning { background: var(--amber-light); color: #92400E; }
+    .sim-insight.danger { background: var(--red-light); color: #991B1B; }
+    .sim-insight-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .sim-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all .15s;
+    }
+    .btn-primary { background: var(--navy); color: var(--white); }
+    .btn-primary:hover { background: var(--navy-mid); }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: var(--slate); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--slate); color: var(--navy); }
+    .step-progress {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .step-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all .2s;
+    }
+    .step-dot.done { background: var(--orange); }
+    .step-dot.current { background: var(--orange); width: 18px; border-radius: 3px; }
+
+    /* ── SCENARIOS GRID ── */
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 768px) { .scenarios-grid { grid-template-columns: 1fr; } }
+
+    .scenario-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .15s;
+      cursor: pointer;
+    }
+    .scenario-card:hover { border-color: var(--slate-light); }
+    .scenario-card.open { border-color: var(--orange); }
+
+    .scenario-header {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .scenario-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .scenario-card.open .scenario-num { background: var(--orange); }
+    .scenario-title-group { flex: 1; }
+    .scenario-title { font-size: 15px; font-weight: 600; }
+    .scenario-subtitle { font-size: 12px; color: var(--slate); margin-top: 2px; }
+
+    .scenario-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      flex-shrink: 0;
+    }
+    .pill-auto { background: var(--green-light); color: #059669; }
+    .pill-action { background: var(--amber-light); color: #92400E; }
+    .pill-risk { background: var(--red-light); color: var(--red); }
+    .pill-info { background: var(--blue-light); color: #1D4ED8; }
+
+    .scenario-chevron {
+      color: var(--slate-light);
+      transition: transform .2s;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .scenario-card.open .scenario-chevron { transform: rotate(180deg); color: var(--orange); }
+
+    .scenario-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease;
+    }
+    .scenario-card.open .scenario-body { max-height: 600px; }
+    .scenario-body-inner {
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+    }
+
+    .scenario-what { font-size: 14px; color: var(--slate); line-height: 1.65; margin-bottom: 14px; }
+    .scenario-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .scenario-table td {
+      padding: 7px 0;
+      border-bottom: 1px solid var(--bg);
+      vertical-align: top;
+    }
+    .scenario-table td:first-child {
+      font-weight: 500;
+      color: var(--slate);
+      width: 140px;
+      padding-right: 12px;
+    }
+    .scenario-callout {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .callout-green { background: var(--green-light); color: #065F46; border-left: 3px solid var(--green); }
+    .callout-amber { background: var(--amber-light); color: #92400E; border-left: 3px solid var(--amber); }
+    .callout-red { background: var(--red-light); color: #991B1B; border-left: 3px solid var(--red); }
+    .callout-blue { background: var(--blue-light); color: #1E3A8A; border-left: 3px solid var(--blue); }
+
+    /* ── SUMMARY TABLE ── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .summary-table th {
+      background: var(--navy);
+      color: var(--white);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .summary-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table tr:hover td { background: var(--bg); }
+    .summary-table .num-cell {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--orange);
+      width: 36px;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap-card {
+      background: var(--white);
+      border: 2px solid var(--purple);
+      border-radius: var(--radius);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .roadmap-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .roadmap-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--white);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+    .roadmap-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .roadmap-card p { font-size: 15px; color: var(--slate); line-height: 1.65; margin-bottom: 20px; max-width: 700px; }
+    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 768px) { .roadmap-grid { grid-template-columns: 1fr; } }
+    .roadmap-item {
+      padding: 16px;
+      background: var(--purple-light);
+      border-radius: var(--radius-sm);
+    }
+    .roadmap-item h4 { font-size: 14px; font-weight: 600; color: var(--purple); margin-bottom: 6px; }
+    .roadmap-item p { font-size: 13px; color: #5B21B6; line-height: 1.5; margin-bottom: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--slate-light);
+    }
+
+    /* ── UTILS ── */
+    .divider { height: 1px; background: var(--border); margin: 0 0 64px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-brand-dot"></div>
+    Braze × Sephora
+  </a>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="scrollTo('concepts')">Concepts</button>
+    <button class="nav-link" onclick="scrollTo('simulator')">Simulator</button>
+    <button class="nav-link" onclick="scrollTo('scenarios')">10 Scenarios</button>
+    <button class="nav-link" onclick="scrollTo('roadmap')">Roadmap</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <span>●</span> Braze Identity & Lifecycle
+  </div>
+  <h1>How Braze <span>recognizes</span> your customers at every step</h1>
+  <p class="hero-sub">
+    A visual, interactive walkthrough of the user profile lifecycle — from the first anonymous visit to cross-device identification — built for the Sephora marketing team.
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value">10</div>
+      <div class="hero-stat-label">Scenarios covered</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">1</div>
+      <div class="hero-stat-label">Unified profile</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">0</div>
+      <div class="hero-stat-label">Data lost at login</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">12m</div>
+      <div class="hero-stat-label">Max anonymous lifespan</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCEPTS -->
+<div class="section" id="concepts">
+  <div class="section-header">
+    <div class="section-label">The basics</div>
+    <h2 class="section-title">Two building blocks behind every Braze identity</h2>
+    <p class="section-sub">The entire system is built on two complementary identifiers.</p>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card">
+      <div class="concept-icon orange">🍪</div>
+      <span class="concept-tag orange">device_id</span>
+      <h3>The visitor cookie</h3>
+      <p>
+        On the very first visit to sephora.com or app open, Braze automatically generates a unique identifier stored in the browser (or app). This cookie persists across sessions and allows Braze to recognize an anonymous visitor on their return — exactly like a first-party cookie, fully under your control.
+        <br/><br/>
+        <strong>Lifespan:</strong> until the visitor clears their cache, switches browsers, or stays inactive for 12 months.
+      </p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon purple">👤</div>
+      <span class="concept-tag purple">external_id</span>
+      <h3>The customer identity (your ID)</h3>
+      <p>
+        When a visitor logs in, your system passes their customer ID (e.g. their Sephora account ID) to Braze. This signal — the login — transforms an anonymous visitor into a named customer, merging the entire anonymous browsing history into their permanent profile.
+        <br/><br/>
+        <strong>Golden rule:</strong> never use an email address or phone number as the identifier. Always use an opaque internal ID.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="divider" style="margin: 0 32px 64px;"></div>
+
+<!-- SIMULATOR -->
+<div class="section" id="simulator">
+  <div class="section-header">
+    <div class="section-label">Interactive simulator</div>
+    <h2 class="section-title">Step through customer journeys</h2>
+    <p class="section-sub">Choose a scenario and advance step by step to see what happens inside Braze.</p>
+  </div>
+
+  <div class="simulator">
+    <div class="sim-header">
+      <div class="sim-header-left">
+        <h3>Journey Simulator</h3>
+        <p>Select a journey and navigate step by step</p>
+      </div>
+      <div class="journey-tabs" id="journey-tabs"></div>
+    </div>
+
+    <div class="sim-body">
+      <div class="sim-diagram" id="sim-diagram">
+        <div class="sim-node" id="node-device">
+          <div class="sim-node-circle anon" id="device-icon">📱</div>
+          <div class="sim-node-label" id="device-label">Device</div>
+          <div class="sim-node-sublabel" id="device-sublabel">Unknown visitor</div>
+        </div>
+        <div class="sim-arrow" id="arrow-left">→</div>
+        <div class="sim-node" id="node-braze">
+          <div class="sim-node-circle anon" id="braze-icon">?</div>
+          <div class="sim-node-label">Braze</div>
+          <div class="sim-node-sublabel" id="braze-sublabel">Anonymous profile</div>
+          <span class="sim-badge anon" id="braze-badge">Anonymous</span>
+        </div>
+        <div class="sim-arrow" id="arrow-right">→</div>
+        <div class="sim-node" id="node-crm">
+          <div class="sim-node-circle empty" id="crm-icon">—</div>
+          <div class="sim-node-label">Sephora CRM</div>
+          <div class="sim-node-sublabel" id="crm-sublabel">No match</div>
+        </div>
+      </div>
+
+      <div class="sim-step-info" id="sim-step-info">
+        <div class="sim-step-number" id="step-number">Step 1 / 4</div>
+        <div class="sim-step-title" id="step-title">Loading...</div>
+        <div class="sim-step-desc" id="step-desc"></div>
+        <div class="sim-insight" id="step-insight">
+          <span class="sim-insight-icon" id="insight-icon">ℹ</span>
+          <span id="insight-text"></span>
+        </div>
+      </div>
+
+      <div class="sim-controls">
+        <button class="btn btn-ghost" id="btn-prev" onclick="simPrev()">← Back</button>
+        <button class="btn btn-primary" id="btn-next" onclick="simNext()">Next step →</button>
+        <div class="step-progress" id="step-progress"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider" style="margin: 0 32px 64px;"></div>
+
+<!-- SCENARIOS -->
+<div class="section" id="scenarios">
+  <div class="section-header">
+    <div class="section-label">The 10 scenarios</div>
+    <h2 class="section-title">Every situation, explained in plain English</h2>
+    <p class="section-sub">Click any scenario to expand the details.</p>
+  </div>
+  <div class="scenarios-grid" id="scenarios-grid"></div>
+</div>
+
+<div class="divider" style="margin: 0 32px 64px;"></div>
+
+<!-- SUMMARY TABLE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-label">Quick reference</div>
+    <h2 class="section-title">All 10 scenarios at a glance</h2>
+  </div>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Scenario</th>
+        <th>Resulting profile</th>
+        <th>Action required from Sephora</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="summary-tbody"></tbody>
+  </table>
+</div>
+
+<div class="divider" style="margin: 0 32px 64px;"></div>
+
+<!-- ROADMAP -->
+<div class="section" id="roadmap">
+  <div class="section-header">
+    <div class="section-label">What's coming</div>
+    <h2 class="section-title">Probabilistic identity resolution</h2>
+  </div>
+  <div class="roadmap-card">
+    <div class="roadmap-badge">
+      <div class="roadmap-pulse"></div>
+      Roadmap 2025–2026
+    </div>
+    <h3>Identify your visitors… even without a login</h3>
+    <p>
+      Today, Braze can only link an anonymous visitor to a known customer at the moment of login (<em>deterministic identification</em>). Probabilistic resolution, planned on the Braze roadmap, will allow inferring the identity of an anonymous visitor from behavioral and contextual signals — without requiring them to log in.
+    </p>
+    <div class="roadmap-grid">
+      <div class="roadmap-item">
+        <h4>Behavioral matching</h4>
+        <p>Braze analyzes browsing patterns, products viewed, and visit timing to match an anonymous profile to a known customer with high confidence.</p>
+      </div>
+      <div class="roadmap-item">
+        <h4>Cross-device signals</h4>
+        <p>Visits from multiple devices sharing common signals (IP range, timezone, similar browsing profile) allow Braze to infer a likely shared identity.</p>
+      </div>
+      <div class="roadmap-item">
+        <h4>Impact for Sephora</h4>
+        <p>Personalized remarketing campaigns for non-logged-in visitors — lower acquisition costs and improved ROAS on paid channels.</p>
+      </div>
+    </div>
+    <div style="margin-top: 20px; padding: 14px 16px; background: #F5F3FF; border-radius: 8px; border-left: 3px solid var(--purple);">
+      <strong style="color: var(--purple); font-size: 13px;">GDPR note:</strong>
+      <span style="font-size: 13px; color: #5B21B6; margin-left: 6px;">
+        Probabilistic resolution introduces important GDPR considerations: inferred data does not constitute explicit consent. Legal review will be required prior to deployment.
+      </span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Braze × Sephora — Internal presentation document · Version 1.0 · April 2026</p>
+  <p style="margin-top: 6px;">Official Braze documentation: <a href="https://www.braze.com/docs" target="_blank" style="color: var(--orange);">docs.braze.com</a></p>
+</footer>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+
+const journeys = [
+  {
+    id: 'first-purchase',
+    label: 'First online purchase',
+    steps: [
+      {
+        title: 'First visit to sephora.com',
+        desc: 'A customer opens her browser and visits sephora.com for the first time. She has no Braze cookie stored.',
+        device: { icon: '💻', label: 'Web browser', sublabel: 'No existing cookie', state: 'anon' },
+        braze: { icon: '?', sublabel: 'New anonymous profile', badge: 'anon', badgeText: 'Anonymous', badgeTone: 'anon' },
+        crm: { icon: '—', sublabel: 'No match', state: 'empty' },
+        arrowLeft: false, arrowRight: false,
+        insight: { tone: 'info', icon: 'ℹ', text: 'Braze automatically generates a unique cookie (invisible to the visitor) and creates an anonymous profile. Zero action required from your team.' }
+      },
+      {
+        title: 'She browses and adds products to her cart',
+        desc: 'She spends 15 minutes on the site, views 8 products, and adds a foundation and serum to her cart.',
+        device: { icon: '💻', label: 'Web browser', sublabel: 'Visitor cookie active', state: 'anon' },
+        braze: { icon: '📊', sublabel: 'History accumulating', badge: 'anon', badgeText: 'Active anonymous', badgeTone: 'anon' },
+        crm: { icon: '—', sublabel: 'No match', state: 'empty' },
+        arrowLeft: true, arrowRight: false,
+        insight: { tone: 'info', icon: 'ℹ', text: 'Braze records: 8 page views, 2 cart adds, 15 min session. All data is stored on the anonymous profile and will be preserved at login.' }
+      },
+      {
+        title: 'She creates a Sephora account',
+        desc: 'She completes the registration form and confirms. Your app passes her customer ID to Braze — this is the key moment.',
+        device: { icon: '💻', label: 'Web browser', sublabel: 'Login detected', state: 'identified' },
+        braze: { icon: '✓', sublabel: 'Identified + full history', badge: 'merged', badgeText: 'Merged', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Marie D. — Account #4721', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '✓', text: 'All 8 page views and 2 cart items are preserved on the new identified profile. Nothing is lost. Braze can now send a personalized welcome email.' }
+      },
+      {
+        title: 'She returns 3 days later',
+        desc: 'She reopens her browser and visits the site again. Her cookie is still present.',
+        device: { icon: '💻', label: 'Web browser', sublabel: 'Cookie recognized', state: 'identified' },
+        braze: { icon: '✓', sublabel: 'Full enriched profile', badge: 'merged', badgeText: 'Identified', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Marie D. — Account #4721', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '✓', text: 'The cookie instantly recognizes Marie without an active login. Braze automatically triggers the cart abandonment campaign on her identified profile.' }
+      }
+    ]
+  },
+  {
+    id: 'multi-device',
+    label: 'Mobile & web customer',
+    steps: [
+      {
+        title: 'She downloads the Sephora app',
+        desc: 'The customer installs the Sephora app on her iPhone. The app generates its own cookie for this device.',
+        device: { icon: '📱', label: 'iPhone', sublabel: 'App cookie created', state: 'anon' },
+        braze: { icon: '?', sublabel: 'Anonymous profile #1 (mobile)', badge: 'anon', badgeText: 'Anonymous', badgeTone: 'anon' },
+        crm: { icon: '—', sublabel: 'No match', state: 'empty' },
+        arrowLeft: true, arrowRight: false,
+        insight: { tone: 'info', icon: 'ℹ', text: 'The mobile app and the web browser each generate separate cookies. At this stage: 1 device = 1 anonymous profile.' }
+      },
+      {
+        title: 'She also visits the website from her laptop',
+        desc: 'The same day, from her MacBook, she browses sephora.com. A new browser cookie is created.',
+        device: { icon: '📱💻', label: 'iPhone + MacBook', sublabel: '2 distinct cookies', state: 'anon' },
+        braze: { icon: '2', sublabel: '2 anonymous profiles', badge: 'anon', badgeText: '2 anonymous', badgeTone: 'anon' },
+        crm: { icon: '—', sublabel: 'No match', state: 'empty' },
+        arrowLeft: true, arrowRight: false,
+        insight: { tone: 'warning', icon: '⚠', text: 'Without a login: 2 devices = 2 independent anonymous profiles. Braze does not yet know it\'s the same person.' }
+      },
+      {
+        title: 'She logs in on the mobile app',
+        desc: 'She signs in to her account in the Sephora app on iPhone. Her customer ID is passed to Braze.',
+        device: { icon: '📱', label: 'iPhone — Logged in', sublabel: 'Customer ID sent', state: 'identified' },
+        braze: { icon: '✓', sublabel: 'Mobile profile identified', badge: 'merged', badgeText: 'Identified (mobile)', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Sophie M. — Account #8832', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '✓', text: 'The anonymous mobile profile merges into the identified profile. Braze can now send push notifications to her iPhone.' }
+      },
+      {
+        title: 'She also logs in on the web',
+        desc: 'The next day, she signs in on sephora.com from her MacBook. The same customer ID is passed.',
+        device: { icon: '📱💻', label: 'iPhone + MacBook — Both logged in', sublabel: '2 devices linked', state: 'identified' },
+        braze: { icon: '★', sublabel: '1 profile, 2 tokens', badge: 'merged', badgeText: 'Unified', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Sophie M. — 2 active channels', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '★', text: 'A single Braze profile for both devices. Sophie can receive push on iPhone AND emails/web push on MacBook — all under one unified identity.' }
+      }
+    ]
+  },
+  {
+    id: 'email-click',
+    label: 'Email click, not logged in',
+    steps: [
+      {
+        title: 'Amina has an abandoned cart',
+        desc: 'Amina, an identified customer, added 3 products to her cart the day before without completing the purchase.',
+        device: { icon: '👤', label: 'Amina', sublabel: 'Identified customer', state: 'identified' },
+        braze: { icon: '✓', sublabel: 'Amina B. — Active cart', badge: 'merged', badgeText: 'Identified', badgeTone: 'merged' },
+        crm: { icon: '🛒', sublabel: 'Cart: 3 items — £89', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'info', icon: 'ℹ', text: 'Braze automatically triggers a cart abandonment email 24h after abandonment, with the 3 personalized products.' }
+      },
+      {
+        title: 'She clicks the email from her browser',
+        desc: 'Amina clicks the link in the email from Firefox, where she is not logged into Sephora.',
+        device: { icon: '📧→💻', label: 'Firefox (not logged in)', sublabel: 'New cookie created', state: 'anon' },
+        braze: { icon: '?', sublabel: 'New anonymous profile!', badge: 'anon', badgeText: 'Anonymous', badgeTone: 'anon' },
+        crm: { icon: '—', sublabel: 'No match', state: 'empty' },
+        arrowLeft: true, arrowRight: false,
+        insight: { tone: 'danger', icon: '⚠', text: 'PROBLEM: this browser has no active Braze cookie. The landing session is anonymous — disconnected from Amina\'s identified profile. Conversion attribution is lost.' }
+      },
+      {
+        title: 'Fix: pass the customer ID in the email link',
+        desc: 'With the right setup, email links include Amina\'s Braze ID as a URL parameter. The landing page reads it and reconnects her immediately.',
+        device: { icon: '💻✓', label: 'Firefox — ID read', sublabel: 'Auto-reconnect', state: 'identified' },
+        braze: { icon: '✓', sublabel: 'Amina B. reconnected', badge: 'merged', badgeText: 'Attributed', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Amina B. — session tracked', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '✓', text: 'Best practice: add ?braze_id={{braze_id}} to email links. The landing page reads this parameter and identifies the visitor automatically — no login required.' }
+      },
+      {
+        title: 'She completes her purchase',
+        desc: 'Amina adds the products to cart and checks out. The conversion is correctly attributed to the cart abandonment email campaign.',
+        device: { icon: '💳', label: 'Purchase confirmed', sublabel: 'Conversion tracked', state: 'identified' },
+        braze: { icon: '★', sublabel: 'Conversion attributed', badge: 'merged', badgeText: 'Converted', badgeTone: 'merged' },
+        crm: { icon: '✓', sublabel: 'Order #20847 — £89', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '★', text: 'The conversion is correctly attributed to the cart abandonment Canvas in Braze. Campaign ROI is measured with full precision.' }
+      }
+    ]
+  },
+  {
+    id: 'shared-device',
+    label: 'Shared in-store device',
+    steps: [
+      {
+        title: 'First customer uses the in-store kiosk',
+        desc: 'Karim uses the beauty kiosk in-store to browse his loyalty account and explore products.',
+        device: { icon: '🖥', label: 'In-store kiosk', sublabel: 'Kiosk cookie active', state: 'anon' },
+        braze: { icon: '?', sublabel: 'Karim\'s session active', badge: 'merged', badgeText: 'Identified', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Karim A. — Gold member', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'info', icon: 'ℹ', text: 'Karim is identified on the kiosk. His interactions (products viewed, favorites added) are tracked on his profile.' }
+      },
+      {
+        title: 'Karim logs out and leaves',
+        desc: 'Karim clicks "Log out" in the interface. But without resetting Braze, the kiosk cookie still points to his session.',
+        device: { icon: '🖥⚠', label: 'In-store kiosk', sublabel: 'Partial logout only', state: 'anon' },
+        braze: { icon: '⚠', sublabel: 'Residual session for Karim!', badge: 'risk', badgeText: 'Risk', badgeTone: 'anon' },
+        crm: { icon: '⚠', sublabel: 'Cookie still active', state: 'empty' },
+        arrowLeft: false, arrowRight: false,
+        insight: { tone: 'danger', icon: '⚠', text: 'GDPR RISK: if the Braze session is not reset, the next customer may see residual data from Karim and their events will be attributed to his profile.' }
+      },
+      {
+        title: 'Fix: full session reset on logout',
+        desc: 'Your developer configures the kiosk to call wipeData() on every logout. The Braze session is fully cleared on the device.',
+        device: { icon: '🖥✓', label: 'Kiosk — Reset', sublabel: 'Cookie cleared', state: 'anon' },
+        braze: { icon: '○', sublabel: 'Fresh anonymous profile', badge: 'anon', badgeText: 'Reset', badgeTone: 'anon' },
+        crm: { icon: '—', sublabel: 'Clean slate', state: 'empty' },
+        arrowLeft: false, arrowRight: false,
+        insight: { tone: 'success', icon: '✓', text: 'After reset: the next customer starts a completely clean session. No data from Karim is accessible. GDPR compliant.' }
+      },
+      {
+        title: 'Second customer: clean session',
+        desc: 'Leila uses the kiosk and logs in. She starts on a completely blank slate.',
+        device: { icon: '🖥', label: 'In-store kiosk', sublabel: 'Leila\'s session — clean', state: 'identified' },
+        braze: { icon: '✓', sublabel: 'Leila S. — Clean profile', badge: 'merged', badgeText: 'Identified', badgeTone: 'merged' },
+        crm: { icon: '👤', sublabel: 'Leila S. — Platinum member', state: 'identified' },
+        arrowLeft: true, arrowRight: true,
+        insight: { tone: 'success', icon: '★', text: 'Perfect session isolation. Leila\'s and Karim\'s data are completely separate. The kiosk is safe for shared use in-store.' }
+      }
+    ]
+  }
+];
+
+const scenarios = [
+  {
+    num: 1,
+    title: 'Net new visitor',
+    subtitle: 'First visit, no existing cookie',
+    pill: 'auto', pillText: 'Automatic',
+    what: 'A visitor opens sephora.com for the first time. The Braze SDK fires on page load and immediately creates an anonymous profile — with no action required from your team. A cookie is stored in the browser to recognize this visitor on future visits.',
+    rows: [
+      ['Profile type', 'Anonymous (unknown visitor)'],
+      ['Identifier', 'Browser cookie (opaque, non-PII)'],
+      ['Data tracked', 'Page views, events, sessions, cart adds'],
+      ['Expiry', 'Deleted if inactive for 12 months or cache cleared'],
+      ['MAU billing', 'Counts as an active user from the first session'],
+    ],
+    callout: { tone: 'green', text: 'Fully automatic. No configuration required for this step.' }
+  },
+  {
+    num: 2,
+    title: 'Customer login',
+    subtitle: 'Merge: anonymous → identified profile',
+    pill: 'action', pillText: 'Action required',
+    what: 'When a visitor logs in (or registers), your app passes their customer ID to Braze. This is the precise moment that triggers the merge: the entire anonymous history (page views, products browsed, carts) transfers to the permanent identified profile.',
+    rows: [
+      ['Trigger', 'Successful login or account creation'],
+      ['Result', 'Identified profile with preserved anonymous history'],
+      ['Critical timing', 'After authentication is confirmed, not on form submission'],
+      ['Golden rule', 'Customer ID must never be an email address or phone number'],
+      ['Existing profile', 'If already known from another device, the current session merges into it'],
+    ],
+    callout: { tone: 'amber', text: 'Your tech team must ensure the customer ID is passed to Braze immediately after login confirmation — not when the form is submitted.' }
+  },
+  {
+    num: 3,
+    title: 'Returning visitor, same browser',
+    subtitle: 'Recognized visitor, session continued',
+    pill: 'auto', pillText: 'Automatic',
+    what: 'A visitor who browsed previously returns to the site from the same browser, without logging in. Braze reads the stored cookie and silently resumes the same anonymous profile — no new profile is created. The browsing history accumulates across visits.',
+    rows: [
+      ['Condition', 'Same browser, cookie intact (not cleared, not expired)'],
+      ['Result', 'Same anonymous profile — session counter incremented'],
+      ['Persistence', 'Until cache is cleared or 12 months of inactivity'],
+      ['Marketing value', 'Track the full multi-session journey before first login'],
+    ],
+    callout: { tone: 'green', text: 'One of Braze\'s key strengths: understanding the complete anonymous journey before the very first login.' }
+  },
+  {
+    num: 4,
+    title: 'Multiple devices, same user',
+    subtitle: 'One customer, multiple devices',
+    pill: 'action', pillText: 'Action required',
+    what: 'A customer browses anonymously from her phone AND her laptop. Braze creates 2 separate anonymous profiles (one per device). It\'s only at login on each device that both sessions merge into a single unified identified profile.',
+    rows: [
+      ['Before login', '2 independent anonymous profiles — Braze doesn\'t know it\'s the same person'],
+      ['After login x2', '1 identified profile with both devices linked'],
+      ['Anonymous history', 'Each device\'s anonymous history merges at the time of login'],
+      ['Available channels', 'Mobile push + web push + email, all from one profile'],
+    ],
+    callout: { tone: 'blue', text: 'Cross-device resolution before login is not automatic. This is exactly what probabilistic resolution (roadmap) will enable.' }
+  },
+  {
+    num: 5,
+    title: 'Logout on a shared device',
+    subtitle: 'In-store kiosks, shared tablets',
+    pill: 'risk', pillText: 'GDPR risk',
+    what: 'On a shared device (in-store kiosk, family tablet), a logout without resetting Braze leaves the previous customer\'s cookie active. The next user could involuntarily see residual data, or have their events attributed to the previous customer\'s profile.',
+    rows: [
+      ['Risk', 'Event attribution to the wrong customer, personal data leak'],
+      ['Fix 1 — wipeData()', 'Completely clears the local Braze session on logout (recommended for kiosks)'],
+      ['Fix 2 — fresh anonymous', 'Generate a new clean anonymous session on every logout'],
+      ['Server impact', 'wipeData() only affects the local device, not the server-side profile'],
+    ],
+    callout: { tone: 'red', text: 'Critical for any Sephora installation with shared devices (beauty kiosks, in-store iPads). Must be implemented before any deployment.' }
+  },
+  {
+    num: 6,
+    title: 'Server-side profile pre-created',
+    subtitle: 'CRM migration, historical data import',
+    pill: 'auto', pillText: 'Automatic',
+    what: 'You import historical customer data into Braze (CRM migration, data warehouse sync) before those customers visit the site. The profile already exists in Braze with its attributes, but without a linked device. On the first visit, the cookie automatically attaches to the existing profile.',
+    rows: [
+      ['Initial state', 'Identified profile in Braze, no device token'],
+      ['Available channels', 'Email and SMS can be sent immediately'],
+      ['Unavailable channels', 'Push notifications and in-app: only available after the first app open'],
+      ['SDK connection', 'Automatic on first visit — the cookie attaches to the existing profile'],
+    ],
+    callout: { tone: 'green', text: 'The ideal pattern for a CRM migration. Import historical data first, then let the SDK link devices naturally as customers engage.' }
+  },
+  {
+    num: 7,
+    title: 'Email click, not logged in',
+    subtitle: 'Anonymous landing session',
+    pill: 'action', pillText: 'Action required',
+    what: 'An identified customer clicks a link in a Braze email (cart abandonment, promo). If they\'re not logged in on that browser, the landing page loads in a new anonymous session — disconnected from the identified profile that received the email. The conversion won\'t be attributed without a fix.',
+    rows: [
+      ['Problem', 'Anonymous landing session ≠ identified profile that received the email'],
+      ['Fix', 'Append the Braze ID as a URL parameter in email links'],
+      ['How', 'Add ?braze_id={{braze_id}} to email templates in Braze'],
+      ['Fallback', 'If the person logs in manually, the following session will be correctly attributed'],
+      ['Impact', 'Conversion attribution, email campaign ROI measurement'],
+    ],
+    callout: { tone: 'amber', text: 'Especially critical for cart abandonment and re-engagement campaigns where landing page conversion is the primary goal.' }
+  },
+  {
+    num: 8,
+    title: 'User alias (pre-registration lead)',
+    subtitle: 'Email captured, account not yet created',
+    pill: 'action', pillText: 'Action required',
+    what: 'Someone leaves their email on a lead capture form (pop-up, wishlist, newsletter) before creating an account. Braze allows creating an "alias profile" identified by that email, sending them messages, and merging the alias into the permanent account at registration.',
+    rows: [
+      ['Profile type', 'Alias profile — identified by email, no account ID yet'],
+      ['Messaging', 'Emails and SMS can be sent immediately to the alias'],
+      ['Merge', 'At account creation: API call to merge the alias profile into the final profile'],
+      ['History', 'Email opens, clicks, and conversions on the alias transfer to the final account'],
+      ['Vs. anonymous', 'Alias profiles are server-side (can receive messages). Anonymous profiles are device-only.'],
+    ],
+    callout: { tone: 'blue', text: 'Ideal for Sephora registration journeys: capture leads and engage them before account creation — including before they become Beauty Insider members.' }
+  },
+  {
+    num: 9,
+    title: 'GDPR deletion + return visit',
+    subtitle: 'Right to erasure exercised',
+    pill: 'risk', pillText: 'Risk',
+    what: 'A customer exercises their GDPR right to erasure. Braze deletes their server-side profile. But if the cookie remains in their browser, their next visit will silently create a new anonymous profile — Braze has no way of knowing this was a previously deleted customer.',
+    rows: [
+      ['Behavior', 'Stale cookie → new anonymous profile created silently'],
+      ['Downstream impact', 'CDPs and BI tools see a "new user" when it\'s actually a returning deleted customer'],
+      ['Recommendation 1', 'Invalidate all active sessions server-side during deletion'],
+      ['Recommendation 2', 'Block re-login: verify that a deleted ID cannot recreate a linked profile without fresh consent'],
+      ['Recommendation 3', 'Document in your Currents pipelines that post-deletion profiles are new users'],
+    ],
+    callout: { tone: 'red', text: 'Must be documented and tested in your GDPR workflow. Braze deletion alone is not enough — sessions and cookies must also be invalidated client-side.' }
+  },
+  {
+    num: 10,
+    title: 'Anonymous profile expiry',
+    subtitle: '12 months of inactivity',
+    pill: 'info', pillText: 'Good to know',
+    what: 'Braze automatically deletes anonymous profiles (no customer ID) that have been inactive for 12 months. If this visitor returns after expiry, their cookie no longer matches any profile: a new anonymous profile is created and the prior history is permanently lost.',
+    rows: [
+      ['Scope', 'Anonymous profiles only (no customer ID). Identified profiles are unaffected.'],
+      ['Trigger', 'No session activity for 12 consecutive months'],
+      ['Notification', 'None — automatic and silent deletion'],
+      ['Recovery', 'Impossible — prior history is permanently gone'],
+      ['Mitigation', 'Encourage account creation to stabilize profiles as permanent identified profiles'],
+    ],
+    callout: { tone: 'blue', text: 'Conversion lever: show recurring anonymous visitors incentives to create an account before their 12-month inactivity window closes.' }
+  }
+];
+
+const summaryData = [
+  [1, 'Net new visitor', 'New anonymous profile', 'None — automatic', 'auto'],
+  [2, 'Customer login', 'Anonymous → Identified (merge)', 'Pass customer ID at login', 'action'],
+  [3, 'Return visit, same browser', 'Anonymous profile resumed', 'None — automatic', 'auto'],
+  [4, 'Multiple devices', '1 identified profile, multiple tokens', 'Log in on each device', 'action'],
+  [5, 'Logout on shared device', 'Session contamination risk', 'Call wipeData() on every logout', 'risk'],
+  [6, 'Server-side profile pre-created', 'Identified (no device token yet)', 'None — SDK attaches on first visit', 'auto'],
+  [7, 'Email click, not logged in', 'New anonymous landing session', 'Pass ID in email links', 'action'],
+  [8, 'User alias (pre-registration)', 'Alias profile → merge at registration', 'Call /users/merge API at signup', 'action'],
+  [9, 'GDPR deletion + return', 'New anonymous profile (fresh start)', 'Invalidate sessions + re-consent on login', 'risk'],
+  [10, '12-month anonymous expiry', 'New anonymous profile (history lost)', 'Encourage account creation', 'info'],
+];
+
+// ─── SIMULATOR STATE ───────────────────────────────────────────────────────────
+
+let currentJourney = 0;
+let currentStep = 0;
+
+function initSimulator() {
+  const tabsEl = document.getElementById('journey-tabs');
+  tabsEl.innerHTML = '';
+  journeys.forEach((j, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'journey-tab' + (i === 0 ? ' active' : '');
+    btn.textContent = j.label;
+    btn.onclick = () => selectJourney(i);
+    tabsEl.appendChild(btn);
+  });
+  renderStep();
+}
+
+function selectJourney(idx) {
+  currentJourney = idx;
+  currentStep = 0;
+  document.querySelectorAll('.journey-tab').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  renderStep();
+}
+
+function simNext() {
+  const steps = journeys[currentJourney].steps;
+  if (currentStep < steps.length - 1) { currentStep++; renderStep(); }
+}
+
+function simPrev() {
+  if (currentStep > 0) { currentStep--; renderStep(); }
+}
+
+function renderStep() {
+  const journey = journeys[currentJourney];
+  const steps = journey.steps;
+  const step = steps[currentStep];
+  const total = steps.length;
+
+  document.getElementById('step-number').textContent = `Step ${currentStep + 1} / ${total}`;
+  document.getElementById('step-title').textContent = step.title;
+  document.getElementById('step-desc').textContent = step.desc;
+
+  const insightEl = document.getElementById('step-insight');
+  insightEl.className = 'sim-insight ' + step.insight.tone;
+  document.getElementById('insight-icon').textContent = step.insight.icon;
+  document.getElementById('insight-text').textContent = step.insight.text;
+
+  const deviceIcon = document.getElementById('device-icon');
+  deviceIcon.textContent = step.device.icon;
+  deviceIcon.className = 'sim-node-circle ' + step.device.state;
+  document.getElementById('device-label').textContent = step.device.label;
+  document.getElementById('device-sublabel').textContent = step.device.sublabel;
+
+  const brazeIcon = document.getElementById('braze-icon');
+  brazeIcon.textContent = step.braze.icon;
+  brazeIcon.className = 'sim-node-circle ' + (step.braze.badgeTone === 'merged' ? 'identified' : 'anon');
+  document.getElementById('braze-sublabel').textContent = step.braze.sublabel;
+  const brazeBadge = document.getElementById('braze-badge');
+  brazeBadge.className = 'sim-badge ' + step.braze.badgeTone;
+  brazeBadge.textContent = step.braze.badgeText;
+
+  const crmIcon = document.getElementById('crm-icon');
+  crmIcon.textContent = step.crm.icon;
+  crmIcon.className = 'sim-node-circle ' + step.crm.state;
+  document.getElementById('crm-sublabel').textContent = step.crm.sublabel;
+
+  document.getElementById('arrow-left').className = 'sim-arrow' + (step.arrowLeft ? ' active' : '');
+  document.getElementById('arrow-right').className = 'sim-arrow' + (step.arrowRight ? ' active' : '');
+
+  const progressEl = document.getElementById('step-progress');
+  progressEl.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = i < currentStep ? 'step-dot done' : i === currentStep ? 'step-dot current' : 'step-dot';
+    progressEl.appendChild(dot);
+  }
+
+  document.getElementById('btn-prev').disabled = currentStep === 0;
+  document.getElementById('btn-next').disabled = currentStep === total - 1;
+  document.getElementById('btn-next').textContent =
+    currentStep === total - 1 ? 'End of journey' : 'Next step →';
+}
+
+// ─── SCENARIOS ─────────────────────────────────────────────────────────────────
+
+function initScenarios() {
+  const grid = document.getElementById('scenarios-grid');
+  scenarios.forEach((s, idx) => {
+    const card = document.createElement('div');
+    card.className = 'scenario-card';
+    card.id = 'scenario-' + idx;
+    const pillClass = { auto: 'pill-auto', action: 'pill-action', risk: 'pill-risk', info: 'pill-info' }[s.pill];
+    const rows = s.rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+    const calloutClass = { green: 'callout-green', amber: 'callout-amber', red: 'callout-red', blue: 'callout-blue' }[s.callout.tone];
+    card.innerHTML = `
+      <div class="scenario-header" onclick="toggleScenario(${idx})">
+        <div class="scenario-num">${s.num}</div>
+        <div class="scenario-title-group">
+          <div class="scenario-title">${s.title}</div>
+          <div class="scenario-subtitle">${s.subtitle}</div>
+        </div>
+        <span class="scenario-pill ${pillClass}">${s.pillText}</span>
+        <span class="scenario-chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-body-inner">
+          <p class="scenario-what">${s.what}</p>
+          <table class="scenario-table">${rows}</table>
+          <div class="scenario-callout ${calloutClass}">${s.callout.text}</div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggleScenario(idx) {
+  document.getElementById('scenario-' + idx).classList.toggle('open');
+}
+
+// ─── SUMMARY TABLE ─────────────────────────────────────────────────────────────
+
+function initSummary() {
+  const tbody = document.getElementById('summary-tbody');
+  const pillMap = {
+    auto: '<span class="scenario-pill pill-auto">Automatic</span>',
+    action: '<span class="scenario-pill pill-action">Action required</span>',
+    risk: '<span class="scenario-pill pill-risk">Risk</span>',
+    info: '<span class="scenario-pill pill-info">Good to know</span>',
+  };
+  summaryData.forEach(([num, scenario, outcome, action, pill]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="num-cell">${num}</td>
+      <td><strong>${scenario}</strong></td>
+      <td style="color: var(--slate)">${outcome}</td>
+      <td style="color: var(--slate)">${action}</td>
+      <td>${pillMap[pill]}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ─── NAV SCROLL ────────────────────────────────────────────────────────────────
+
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  initSimulator();
+  initScenarios();
+  initSummary();
+});
+</script>
+</body>
+</html>
