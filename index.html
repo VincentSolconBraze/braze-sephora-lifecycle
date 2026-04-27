@@ -571,7 +571,7 @@
   </p>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-value">10</div>
+      <div class="hero-stat-value">9</div>
       <div class="hero-stat-label">Scenarios covered</div>
     </div>
     <div class="hero-stat">
@@ -698,7 +698,7 @@
 <div class="section">
   <div class="section-header">
     <div class="section-label">Quick reference</div>
-    <h2 class="section-title">All 10 scenarios at a glance</h2>
+    <h2 class="section-title">All 9 scenarios at a glance</h2>
   </div>
   <table class="summary-table">
     <thead>
@@ -725,7 +725,7 @@
   <div class="roadmap-card">
     <div class="roadmap-badge">
       <div class="roadmap-pulse"></div>
-      Roadmap 2025–2026
+      Roadmap 2026
     </div>
     <h3>Identify your visitors… even without a login</h3>
     <p>
@@ -888,48 +888,6 @@ const journeys = [
         insight: { tone: 'success', icon: '★', text: 'The conversion is correctly attributed to the cart abandonment Canvas in Braze. Campaign ROI is measured with full precision.' }
       }
     ]
-  },
-  {
-    id: 'shared-device',
-    label: 'Shared in-store device',
-    steps: [
-      {
-        title: 'First customer uses the in-store kiosk',
-        desc: 'Karim uses the beauty kiosk in-store to browse his loyalty account and explore products.',
-        device: { icon: '🖥', label: 'In-store kiosk', sublabel: 'Kiosk cookie active', state: 'anon' },
-        braze: { icon: '?', sublabel: 'Karim\'s session active', badge: 'merged', badgeText: 'Identified', badgeTone: 'merged' },
-        crm: { icon: '👤', sublabel: 'Karim A. — Gold member', state: 'identified' },
-        arrowLeft: true, arrowRight: true,
-        insight: { tone: 'info', icon: 'ℹ', text: 'Karim is identified on the kiosk. His interactions (products viewed, favorites added) are tracked on his profile.' }
-      },
-      {
-        title: 'Karim logs out and leaves',
-        desc: 'Karim clicks "Log out" in the interface. But without resetting Braze, the kiosk cookie still points to his session.',
-        device: { icon: '🖥⚠', label: 'In-store kiosk', sublabel: 'Partial logout only', state: 'anon' },
-        braze: { icon: '⚠', sublabel: 'Residual session for Karim!', badge: 'risk', badgeText: 'Risk', badgeTone: 'anon' },
-        crm: { icon: '⚠', sublabel: 'Cookie still active', state: 'empty' },
-        arrowLeft: false, arrowRight: false,
-        insight: { tone: 'danger', icon: '⚠', text: 'GDPR RISK: if the Braze session is not reset, the next customer may see residual data from Karim and their events will be attributed to his profile.' }
-      },
-      {
-        title: 'Fix: full session reset on logout',
-        desc: 'Your developer configures the kiosk to call wipeData() on every logout. The Braze session is fully cleared on the device.',
-        device: { icon: '🖥✓', label: 'Kiosk — Reset', sublabel: 'Cookie cleared', state: 'anon' },
-        braze: { icon: '○', sublabel: 'Fresh anonymous profile', badge: 'anon', badgeText: 'Reset', badgeTone: 'anon' },
-        crm: { icon: '—', sublabel: 'Clean slate', state: 'empty' },
-        arrowLeft: false, arrowRight: false,
-        insight: { tone: 'success', icon: '✓', text: 'After reset: the next customer starts a completely clean session. No data from Karim is accessible. GDPR compliant.' }
-      },
-      {
-        title: 'Second customer: clean session',
-        desc: 'Leila uses the kiosk and logs in. She starts on a completely blank slate.',
-        device: { icon: '🖥', label: 'In-store kiosk', sublabel: 'Leila\'s session — clean', state: 'identified' },
-        braze: { icon: '✓', sublabel: 'Leila S. — Clean profile', badge: 'merged', badgeText: 'Identified', badgeTone: 'merged' },
-        crm: { icon: '👤', sublabel: 'Leila S. — Platinum member', state: 'identified' },
-        arrowLeft: true, arrowRight: true,
-        insight: { tone: 'success', icon: '★', text: 'Perfect session isolation. Leila\'s and Karim\'s data are completely separate. The kiosk is safe for shared use in-store.' }
-      }
-    ]
   }
 ];
 
@@ -994,20 +952,6 @@ const scenarios = [
   },
   {
     num: 5,
-    title: 'Logout on a shared device',
-    subtitle: 'In-store kiosks, shared tablets',
-    pill: 'risk', pillText: 'GDPR risk',
-    what: 'On a shared device (in-store kiosk, family tablet), a logout without resetting Braze leaves the previous customer\'s cookie active. The next user could involuntarily see residual data, or have their events attributed to the previous customer\'s profile.',
-    rows: [
-      ['Risk', 'Event attribution to the wrong customer, personal data leak'],
-      ['Fix 1 — wipeData()', 'Completely clears the local Braze session on logout (recommended for kiosks)'],
-      ['Fix 2 — fresh anonymous', 'Generate a new clean anonymous session on every logout'],
-      ['Server impact', 'wipeData() only affects the local device, not the server-side profile'],
-    ],
-    callout: { tone: 'red', text: 'Critical for any Sephora installation with shared devices (beauty kiosks, in-store iPads). Must be implemented before any deployment.' }
-  },
-  {
-    num: 6,
     title: 'Server-side profile pre-created',
     subtitle: 'CRM migration, historical data import',
     pill: 'auto', pillText: 'Automatic',
@@ -1021,7 +965,7 @@ const scenarios = [
     callout: { tone: 'green', text: 'The ideal pattern for a CRM migration. Import historical data first, then let the SDK link devices naturally as customers engage.' }
   },
   {
-    num: 7,
+    num: 6,
     title: 'Email click, not logged in',
     subtitle: 'Anonymous landing session',
     pill: 'action', pillText: 'Action required',
@@ -1036,7 +980,7 @@ const scenarios = [
     callout: { tone: 'amber', text: 'Especially critical for cart abandonment and re-engagement campaigns where landing page conversion is the primary goal.' }
   },
   {
-    num: 8,
+    num: 7,
     title: 'User alias (pre-registration lead)',
     subtitle: 'Email captured, account not yet created',
     pill: 'action', pillText: 'Action required',
@@ -1051,7 +995,7 @@ const scenarios = [
     callout: { tone: 'blue', text: 'Ideal for Sephora registration journeys: capture leads and engage them before account creation — including before they become Beauty Insider members.' }
   },
   {
-    num: 9,
+    num: 8,
     title: 'GDPR deletion + return visit',
     subtitle: 'Right to erasure exercised',
     pill: 'risk', pillText: 'Risk',
@@ -1066,7 +1010,7 @@ const scenarios = [
     callout: { tone: 'red', text: 'Must be documented and tested in your GDPR workflow. Braze deletion alone is not enough — sessions and cookies must also be invalidated client-side.' }
   },
   {
-    num: 10,
+    num: 9,
     title: 'Anonymous profile expiry',
     subtitle: '12 months of inactivity',
     pill: 'info', pillText: 'Good to know',
@@ -1087,12 +1031,11 @@ const summaryData = [
   [2, 'Customer login', 'Anonymous → Identified (merge)', 'Pass customer ID at login', 'action'],
   [3, 'Return visit, same browser', 'Anonymous profile resumed', 'None — automatic', 'auto'],
   [4, 'Multiple devices', '1 identified profile, multiple tokens', 'Log in on each device', 'action'],
-  [5, 'Logout on shared device', 'Session contamination risk', 'Call wipeData() on every logout', 'risk'],
-  [6, 'Server-side profile pre-created', 'Identified (no device token yet)', 'None — SDK attaches on first visit', 'auto'],
-  [7, 'Email click, not logged in', 'New anonymous landing session', 'Pass ID in email links', 'action'],
-  [8, 'User alias (pre-registration)', 'Alias profile → merge at registration', 'Call /users/merge API at signup', 'action'],
-  [9, 'GDPR deletion + return', 'New anonymous profile (fresh start)', 'Invalidate sessions + re-consent on login', 'risk'],
-  [10, '12-month anonymous expiry', 'New anonymous profile (history lost)', 'Encourage account creation', 'info'],
+  [5, 'Server-side profile pre-created', 'Identified (no device token yet)', 'None — SDK attaches on first visit', 'auto'],
+  [6, 'Email click, not logged in', 'New anonymous landing session', 'Pass ID in email links', 'action'],
+  [7, 'User alias (pre-registration)', 'Alias profile → merge at registration', 'Call /users/merge API at signup', 'action'],
+  [8, 'GDPR deletion + return', 'New anonymous profile (fresh start)', 'Invalidate sessions + re-consent on login', 'risk'],
+  [9, '12-month anonymous expiry', 'New anonymous profile (history lost)', 'Encourage account creation', 'info'],
 ];
 
 // ─── SIMULATOR STATE ───────────────────────────────────────────────────────────
